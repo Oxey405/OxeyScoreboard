@@ -1,0 +1,14 @@
+{
+  "name": "oxeyscoreboard",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "author": "oxey405",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
