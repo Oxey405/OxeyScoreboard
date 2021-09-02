@@ -18,5 +18,5 @@ Scoreboard
 4) 70 
 5) 9 
 ## Codes of Error and Warning
-45-RecordScore > Skipping writing because the user has a better score in the database
-13-GetFileContent > Cannot read file content or cannot find file...
+`45-RecordScore` > Skipping writing because the user has a better score in the database
+`13-GetFileContent` > Cannot read file content or cannot find file...
