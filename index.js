@@ -2,11 +2,16 @@ const fs = require("fs");
 const os = require("os");
 const pathToJson = os.homedir() + "/scoreboard.json";
 const express = require("express");
+var cors = require('cors')
+
 const { json } = require("express");
 const app = express();
 var jsonContent ;
 
-
+app.use(cors())
+var corsOptions = {
+    origin: 'http://localhost'
+}
 function getFileContent() {
     try {jsonContent = JSON.parse(fs.readFileSync(pathToJson, 'utf-8'));}
     catch {
@@ -18,28 +23,34 @@ function getFileContent() {
 function writeScore(username, score, dataJson) {
 var positionToSet ;
 if(jsonContent.score.length == 0) {
+    console.log("no entry in scoreboard");
 jsonContent.score[0] = dataJson ;
 return fs.writeFileSync(pathToJson, JSON.stringify(jsonContent));
 }
 if(jsonContent.score.length == 1) {
+    console.log("one entry in scoreboard");
     const scoreOfPosition = jsonContent.score[0].score;
 if(scoreOfPosition < score) {
     jsonContent.score.splice(0, 0, dataJson)
+    console.log("putting score in first position");
 } else {
-    jsonContent.score.splice(1, 0, dataJson)
+    jsonContent.score.splice(1, 0, dataJson);
+    console.log("putting score in second position");
 }
-return fs.writeFileSync(pathToJson, JSON.stringify(jsonContent));
+console.log("writing...");
+fs.writeFileSync(pathToJson, JSON.stringify(jsonContent));
+return ;
 }
-if(jsonContent.score.length > 1) {
+if(jsonContent.score.length >= 1) {
+    console.log("multiple entries in scoreboard");
     var lengthOfArray = jsonContent.score.length;
     //removing old scores if the username is taken...
+    console.log("looping...");
     for (let z = 0; z < jsonContent.score.length; z++) {
         const element = jsonContent.score[z];
-        console.log(element.score == score);
         if(element.username == username) {
             if(element.score < score) {
             jsonContent.score.splice(z, 1);
-            console.log(jsonContent.score);
             } else {
                 return console.log("Skipping writing (CODE : 45-RecordScore)");
             }
@@ -74,7 +85,7 @@ getFileContent();
 
 }
 
-app.get("/setScore", (req, res) => {
+app.get("/setScore", cors(corsOptions),(req, res) => {
 getFileContent();
 //get arguments
 var argStart = req.url.indexOf("?")+1;
